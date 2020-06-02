@@ -1,21 +1,75 @@
+const express = require('express');
+const router = express.Router();
+
+const add = require("./components/basic/addition/routes.js");
+
+router.use(add)
 
 
-const simpleAdd = require("./components/basic/addition/routes.js");
-const MathOperations = require("./util/math");
+module.exports = router;
 
-const math = new MathOperations; 
 
-const stringToNumArray = (str) => str.split(",").map(Number); 
 
-module.exports = {
-    simpleAdd
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // app.get('/', (req, res) => {
 //     res.send({ msg: 'Welcome to ' });
 // })
-
-
 
 // app.get('/subtract/simple', (req, res) => {
 //     let x = req.query.x;

@@ -4,13 +4,13 @@ const math = new MathOperations;
 
 const stringToNumArray = (str) => str.split(",").map(Number); 
 
-// simple addition
-exports = simpleAddition = (req, res) => {
+// Simple Addition
+exports.simpleAddition = (req, res) => {
     let x = req.query.x;
     let y = req.query.y;
 
     // input check, update tyep check
-    if (Number(x) < -100000000000 || Number(x) > 100000000000 || Number(y) < -100000000000 || Number(y) > 100000000000 || y !== typeof String) {
+    if (Number(x) < -100000000000 || Number(x) > 100000000000 || Number(y) < -100000000000 || Number(y) > 100000000000) {
         setTimeout(() => {
             res.send({
                 operation: 'addition',
@@ -28,8 +28,8 @@ exports = simpleAddition = (req, res) => {
     }
 };
 
-// multiple addition
-exports = multipleAddition = (req, res) => {
+// Multiple Addition
+exports.multipleAddition = (req, res) => {
     let x = req.query.x;
 
     // input check, array check, item size check

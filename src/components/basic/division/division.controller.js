@@ -6,8 +6,8 @@ const stringToNumArray = helpers.stringToNumArray;
 
 // Simple Division
 exports.simpleDivision = (req, res) => {
-    let x = req.query.x;
-    let y = req.query.y;
+    const x = req.query.x;
+    const y = req.query.y;
 
     // input check, update tyep check
     if (Number(x) < -100000000000 || Number(x) > 100000000000 || Number(y) < -100000000000 || Number(y) > 100000000000) {
@@ -26,7 +26,7 @@ exports.simpleDivision = (req, res) => {
 
 // Multiple Division
 exports.multipleDivision = (req, res) => {
-    let x = req.query.x;
+    const x = req.query.x;
 
     // input check, array check, item size check
     if (!x) {

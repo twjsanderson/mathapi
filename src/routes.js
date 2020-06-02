@@ -7,12 +7,25 @@ const subtract = require("./components/basic/subtraction/subtraction.routes.js")
 const multiply = require("./components/basic/multiplication/multiplication.routes.js");
 const divide = require("./components/basic/division/division.routes.js");
 
+// POWERS ROUTES
+const exponent = require("./components/powers/exponent/exponent.routes.js");
+const sqrt = require("./components/powers/sqrt/sqrt.routes.js");
+
+// QUADRATIC ROUTE
+const quadratic = require("./components/quadratic/quadratic.routes.js");
 
 // BASIC
 router.use(add);
 router.use(subtract);
 router.use(multiply);
 router.use(divide);
+
+// POWERS
+router.use(exponent);
+router.use(sqrt);
+
+// QUADRATIC 
+router.use(quadratic);
 
 module.exports = router;
 

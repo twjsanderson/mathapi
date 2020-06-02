@@ -7,8 +7,8 @@ const stringToNumArray = helpers.stringToNumArray;
 
 // Simple Subtraction
 exports.simpleSubtraction = (req, res) => {
-    let x = req.query.x;
-    let y = req.query.y;
+    const x = req.query.x;
+    const y = req.query.y;
 
     // input check, update tyep check
     if (Number(x) < -100000000000 || Number(x) > 100000000000 || Number(y) < -100000000000 || Number(y) > 100000000000) {
@@ -28,7 +28,7 @@ exports.simpleSubtraction = (req, res) => {
 
 // Multiple Subtraction
 exports.multipleSubtraction = (req, res) => {
-    let x = req.query.x;
+    const x = req.query.x;
 
     // input check, array check, item size check
     if (!x) {

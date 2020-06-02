@@ -44,20 +44,8 @@ class MathOperations {
         return exponent < 0 ? 1 / Math.pow(base, -exponent) : Math.pow(base, exponent);
     };
 
-    exponentOfExponent = (base, innerExponent, outerExponent) => {
-        const power = multiply(innerExponent, outerExponent); 
-        return (innerExponent < 0 && outerExponent > 0) || (innerExponent > 0 && outerExponent < 0) ? 1 / exponent(base, -power) : exponent(x, power);
-    };
-
     squareRoot = (base) => {
         return Math.sqrt(base);
-    };
-
-    // 3 sqrt 8 ^ 2 === rootIndex sqrt base ^ power
-    // rounded to nearest whole number
-    fractionalExponent = (rootIndex, base, power) => {
-        const newPower = power / rootIndex;
-        return Math.round((this.exponent(base, newPower)));
     };
 
     mean = (digits) => {

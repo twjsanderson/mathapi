@@ -1,10 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-const add = require("./components/basic/addition/routes.js");
+// BASIC ROUTES
+const add = require("./components/basic/addition/addition.routes.js");
+const subtract = require("./components/basic/subtraction/subtraction.routes.js");
+const multiply = require("./components/basic/multiplication/multiplication.routes.js");
+const divide = require("./components/basic/division/division.routes.js");
 
-router.use(add)
 
+// BASIC
+router.use(add);
+router.use(subtract);
+router.use(multiply);
+router.use(divide);
 
 module.exports = router;
 

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Controllers
-const additionController = require("./controller");
+const additionController = require("./addition.controller");
 
 // GET SIMPLE ADDITION
 router.get('/add/simple', (req, res) => {

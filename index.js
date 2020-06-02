@@ -1,22 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const cors = require("cors");
-
 const app = express();
 
-const MathOperations = require("./src/api/util/math");
+const config = require("./src/config/config.js");
+const routes = require("./src/api/routes.js");
+const port = config.port;
 
-const Math = new MathOperations;
-
-// middleware
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-console.log(Math.quadraticFormula(1, 5, 1))
 
+app.use('/api', routes)
 
-// app.use('/api', routes)
-
-app.listen(5000, () => {
-    console.log('app listening on port 5000')
+app.listen(port, () => {
+    console.log(`app listening on port ${port}`)
 });

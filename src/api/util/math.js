@@ -4,7 +4,7 @@ class MathOperations {
         return x + y;
     };
 
-    addArray = (digits) => {
+    addMultiple = (digits) => {
         return digits.reduce((acc, curr) => {
             return acc + curr;
         });
@@ -14,7 +14,7 @@ class MathOperations {
         return x - y;
     };
 
-    subtractArray = (digits) => {
+    subtractMultiple = (digits) => {
         return digits.reduce((acc, curr) => {
             return acc - curr;
         });
@@ -24,7 +24,7 @@ class MathOperations {
         return x * y;
     };
 
-    multiplyArray = (digits) => {
+    multiplyMultiple = (digits) => {
         return digits.reduce((acc, curr) => {
             return acc * curr;
         });
@@ -34,7 +34,7 @@ class MathOperations {
         return numerator / denominator;
     };
 
-    divideArray = (digits) => {
+    divideMultiple = (digits) => {
         return digits.reduce((acc, curr) => {
             return acc / curr;
         });
@@ -61,7 +61,7 @@ class MathOperations {
     };
 
     mean = (digits) => {
-        const digitsSum = this.addArray(digits);
+        const digitsSum = this.addMultiple(digits);
         return digitsSum / digits.length;
     };
 
@@ -113,7 +113,7 @@ class MathOperations {
         const differencesSquared = digits.map((digit) => {
             return this.exponent(digit - digitsMean, 2);
         });
-        const totalDifferencesSquared = this.addArray(differencesSquared);
+        const totalDifferencesSquared = this.addMultiple(differencesSquared);
         const variance = totalDifferencesSquared / differencesSquared.length;
         
         return variance;
@@ -137,11 +137,11 @@ class MathOperations {
         const e1 = -b + d;
         const e2 = -b - d;
 
-        const solution1 = e1 / this.multiply(2, a);
-        const solution2 = e2 / this.multiply(2, a);
+        const positiveSolution = e1 / this.multiply(2, a);
+        const negativeSolution = e2 / this.multiply(2, a);
 
-        solutions.push(solution1);
-        solutions.push(solution2);
+        solutions.push(positiveSolution);
+        solutions.push(negativeSolution);
 
         return solutions;
     }; 

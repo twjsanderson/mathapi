@@ -4,13 +4,13 @@ const router = express.Router();
 // Controllers
 const additionController = require("./addition.controller");
 
-// GET SIMPLE ADDITION
-router.get('/add/simple', (req, res) => {
+// POST SIMPLE ADDITION
+router.post('/add/simple', (req, res) => {
     return additionController.simpleAddition(req, res);
 });
 
-// GET MULTIPLE ADDITION
-router.get('/add/multiple', (req, res) => {
+// POST MULTIPLE ADDITION
+router.post('/add/multiple', (req, res) => {
     return additionController.multipleAddition(req, res);
 });
 

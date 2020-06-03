@@ -1,2 +1,5 @@
-creat ebasic routes
-add admin and user accounts with db and auth
+TODO: 
+- tests
+- logger
+- data validation
+- basic rate limiter using IP address

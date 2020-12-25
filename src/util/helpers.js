@@ -1,7 +1,5 @@
+class Helpers {
+    stringToNumArray = (str) => str.split(",").map(Number); 
+};
 
-// convert string into array of numbers
-const stringToNumArray = (str) => str.split(",").map(Number); 
-
-module.exports = {
-    stringToNumArray
-}
+module.exports = Helpers;

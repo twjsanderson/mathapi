@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 // Controllers
-const exponentController = require("./exponent.controller");
+const Exponent = require("./exponent.controller");
+
+const { simpleExponent } = new Exponent;
 
 // GET SIMPLE EXPONENT
 router.get('/powers/exponent', (req, res) => {
-    return exponentController.exponent(req, res);
+    return simpleExponent(req, res);
 });
 
 

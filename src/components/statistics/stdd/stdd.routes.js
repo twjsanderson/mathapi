@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 // Controllers
-const stddController = require("./stdd.controller");
+const StandardDeviation = require("./stdd.controller");
+
+const { stddCalc } = new StandardDeviation;
 
 // POST STANDARD DEVIATION
 router.post('/standardDeviation', (req, res) => {
-    return stddController.stdd(req, res);
+    return stddCalc(req, res);
 });
 
 module.exports = router;

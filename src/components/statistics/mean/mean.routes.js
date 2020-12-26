@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 // Controllers
-const meanController = require("./mean.controller");
+const Mean = require("./mean.controller");
+
+const { simpleMean } = new Mean;
 
 // POST MEAN
 router.post('/mean', (req, res) => {
-    return meanController.mean(req, res);
+    return simpleMean(req, res);
 });
 
 module.exports = router;

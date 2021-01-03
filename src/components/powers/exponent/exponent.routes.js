@@ -11,5 +11,4 @@ router.get('/powers/exponent', (req, res) => {
     return simpleExponent(req, res);
 });
 
-
 module.exports = router;

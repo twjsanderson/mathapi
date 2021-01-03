@@ -1,5 +1,5 @@
 const MathOperations = require("../../../util/math");
-const helpers = require("../../../util/helpers");
+const Helpers = require("../../../util/helpers");
 
 const math = new MathOperations; 
 const helpers = new Helpers;

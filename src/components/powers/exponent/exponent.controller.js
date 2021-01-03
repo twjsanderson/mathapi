@@ -25,4 +25,4 @@ class Exponent {
     };
 };
 
-exports.module = Exponent;
+module.exports = Exponent;

@@ -1,12 +1,26 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser')
-const cors = require("cors");
+const cors = require('cors');
+
+const Authentication = require('./src/middleware/authentication');
+
+const authentication = new Authentication({ user: 'Tom' });
+
+// let accessTok = authentication.generateAccessToken();
+// let refreshTok = authentication.generateRefreshToken();
+
+// console.log(authentication.verifyToken(accessTok, 'accessToken'));
+// console.log(authentication.verifyToken(refreshTok, 'refreshToken'));
+
+
 
 // config 
-const port = require("./src/config/config.js").port;
+const port = require('./src/config/config.js').port;
 
 // routes
-const routes = require("./src/routes.js");
+const routes = require('./src/routes.js');
 
 const app = express();
 

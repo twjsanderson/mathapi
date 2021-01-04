@@ -2,22 +2,22 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 
-class Authentication {
-    constructor(user) {
-        this.user = user;
+class AuthenticationController {
+    constructor(req, res) {
+        this.refreshTokens = [];
+        this.req = req;
+        this.res = res;
         this.time = '20s'
         this.secretAccessToken = process.env.ACCESS_TOKEN_SECRET;
         this.secretRefreshToken = process.env.REFRESH_TOKEN_SECRET;
     };
 
     generateAccessToken = () => {
-        if (this.user === undefined) return 'User is not defined.'
-        return jwt.sign(this.user, this.secretAccessToken, { expiresIn: this.time });
+        return jwt.sign({name: this.req.query.user}, this.secretAccessToken, { expiresIn: this.time });
     };
 
     generateRefreshToken = () => {
-        if (this.user === undefined) return 'User is not defined.'
-        jwt.sign(this.user, this.secretRefreshToken);
+        return jwt.sign({name: this.req.query.user}, this.secretRefreshToken);
     };
 
     verifyToken = (token, type) => {
@@ -34,6 +34,13 @@ class Authentication {
         });
     };
 
+    requestTokens = () => {
+        const accessToken = this.generateAccessToken();
+        const refreshToken = this.generateRefreshToken();
+        this.refreshTokens.push(refreshToken);
+        this.res.json({ accessToken, refreshToken });
+    };
+
 };
 
-module.exports = Authentication;
+module.exports = AuthenticationController;

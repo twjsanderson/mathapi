@@ -4,9 +4,9 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const cors = require('cors');
 
-const Authentication = require('./src/middleware/authentication');
+// const Authentication = require('./src/middleware/authentication/authentication.controller');
 
-const authentication = new Authentication({ user: 'Tom' });
+// const authentication = new Authentication({ user: 'Tom' });
 
 // let accessTok = authentication.generateAccessToken();
 // let refreshTok = authentication.generateRefreshToken();

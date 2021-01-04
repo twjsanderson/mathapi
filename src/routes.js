@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+// AUTHENTICATION ROUTES
+const access = require('./middleware/authentication/authentication.routes');
+
 // BASIC ROUTES
 const add = require("./components/basic/addition/addition.routes");
 const subtract = require("./components/basic/subtraction/subtraction.routes");
@@ -22,6 +25,8 @@ const range = require("./components/statistics/range/range.routes");
 const variance = require("./components/statistics/variance/variance.routes");
 const stdd = require("./components/statistics/stdd/stdd.routes");
 
+// AUTHENTICATION
+router.use(access);
 
 // BASIC
 router.use(add);

@@ -48,7 +48,7 @@ class AuthenticationController {
         const token = this.verifyToken(refreshToken, 'refreshToken');
         if (token.err) return this.res.sendStatus(403)
         const accessToken = this.generateAccessToken()
-        this.res.json({ accessToken: accessToken })
+        return this.res.json({ accessToken: accessToken })
     };
 
     deleteRefreshToken = () => {

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "testDb": "node ./src/db/db.js createAllTables & node ./src/db/db.js dropAllTables"
+    "testDb": "node ./src/db/testDb.js createAllTables & node ./src/db/testDb.js dropAllTables"
   },
   "author": "",
   "license": "ISC",

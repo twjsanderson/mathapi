@@ -1,4 +1,4 @@
-const pool = require('./pool.js');
+const pool = require('./config.js');
 
 pool.on('connect', () => {
   console.log('connected to the db');
@@ -24,7 +24,7 @@ const poolQuery = (query) => {
 /**
  * Create Tokens Table
  */
-const createTokensTable = () => {
+const createtokensTable = () => {
   const tokenCreateQuery = `CREATE TABLE IF NOT EXISTS tokens
   (id SERIAL PRIMARY KEY, 
   name VARCHAR(100) NOT NULL, 
@@ -33,24 +33,6 @@ const createTokensTable = () => {
 
   poolQuery(tokenCreateQuery);
 };
-
-const addToTokensTable = (params) => {
-    const addTokenQuery = `INSERT INTO tokens (name, ip_address) 
-    VALUES (${params.name}, ${params.ip_address})`;
-
-    poolQuery(addTokenQuery);
-};
-
-
-
-const deleteFromTokensTable = (params) => {
-    const deleteTokenQuery = `DELETE FROM tokens 
-    WHERE name = ${params.name} 
-    AND ip_address = ${params.ip_address}`;
-
-    poolQuery(deleteTokenQuery);
-};
-
 
 /**
  * Drop Tokens Table
@@ -63,7 +45,7 @@ const dropTokensTable = () => {
 /**
  * Create All Tables
  */
-const createAllTables = () => createTokensTable();
+const createAllTables = () => createtokensTable();
 
 
 /**

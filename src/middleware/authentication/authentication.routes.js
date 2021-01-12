@@ -7,11 +7,9 @@ const AuthenticationController = require('./authentication.controller');
 // POST - REQUEST ACCESS & REFRESH TOKENS
 router.post('/auth/login', (req, res) => {
    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-   console.log(ipAddress)
-
     if (!req.query.user) return res.sendStatus(400);
     const authentication = new AuthenticationController(req, res);
-    return authentication.requestTokens();
+    return authentication.requestTokens(ipAddress);
 });
 
 // POST - REFRESH AN EXISTING ACCESS TOKEN

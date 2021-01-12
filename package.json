@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js",
+    "testDb": "node ./src/db/db.js createAllTables & node ./src/db/db.js dropAllTables"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "make-runnable": "^1.3.8",
     "morgan": "^1.10.0",
     "pg": "^8.2.1",
     "uuid": "^8.1.0"

@@ -1,52 +1,24 @@
 class MathOperations {
 
-    add = (x, y) => {
-        return x + y;
-    };
+    add = (x, y) => x + y;
 
-    addMultiple = (digits) => {
-        return digits.reduce((acc, curr) => {
-            return acc + curr;
-        });
-    };
+    addMultiple = (digits) => digits.reduce((acc, curr) => acc + curr);
 
-    subtract = (x, y) => {
-        return x - y;
-    };
+    subtract = (x, y) => x - y;
 
-    subtractMultiple = (digits) => {
-        return digits.reduce((acc, curr) => {
-            return acc - curr;
-        });
-    };
+    subtractMultiple = (digits) => digits.reduce((acc, curr) => acc - curr);
 
-    multiply = (x, y) => {
-        return x * y;
-    };
+    multiply = (x, y) => x * y;
 
-    multiplyMultiple = (digits) => {
-        return digits.reduce((acc, curr) => {
-            return acc * curr;
-        });
-    };
+    multiplyMultiple = (digits) => digits.reduce((acc, curr) => acc * curr);
 
-    divide = (numerator, denominator) => {
-        return numerator / denominator;
-    };
+    divide = (numerator, denominator) => numerator / denominator;
 
-    divideMultiple = (digits) => {
-        return digits.reduce((acc, curr) => {
-            return acc / curr;
-        });
-    };
+    divideMultiple = (digits) => digits.reduce((acc, curr) => acc / curr);
 
-    exponent = (base, exponent) => {
-        return exponent < 0 ? 1 / Math.pow(base, -exponent) : Math.pow(base, exponent);
-    };
+    exponent = (base, exponent) => exponent < 0 ? 1 / Math.pow(base, -exponent) : Math.pow(base, exponent);
 
-    squareRoot = (base) => {
-        return Math.sqrt(base);
-    };
+    squareRoot = (base) => Math.sqrt(base);
 
     mean = (digits) => {
         const digitsSum = this.addMultiple(digits);
@@ -54,37 +26,32 @@ class MathOperations {
     };
 
     median = (digits) => {
-
-        const sortedDigits = digits.sort((a, b) => {
-            return a - b
-        });
-
+        const sortedDigits = digits.sort((a, b) => a - b);
         const len = sortedDigits.length;
         const medianIndex = Math.floor(len/ 2);
         
-        if (len / 2 % 2 === 0) {
-            return (sortedDigits[medianIndex] + sortedDigits[medianIndex - 1]) / 2;
-        }
+        if (len / 2 % 2 === 0) (sortedDigits[medianIndex] + sortedDigits[medianIndex - 1]) / 2;
 
         return sortedDigits[medianIndex];
     };
 
     mode = (digits) => {
-        const hashMap = new Set;
+        const hashMap = {};
         const modes = [];
 
         for (let digit of digits) {
-            hashMap[digit] = 0;
-        };
-
-        for (let digit of digits) {
-            hashMap[digit] += 1
+            if (!hashMap[digit]) {
+                hashMap[digit] = 0;
+            } else {
+                hashMap[digit]++;
+            };
         };
 
         const maxNumOfOccurences = Math.max(...Object.values(hashMap));
 
         for (let key in hashMap) {
-            if (Number(hashMap[key]) === maxNumOfOccurences) {
+            const num = Number(hasMap[key]);
+            if (num === maxNumOfOccurences) {
                 modes.push(Number(key));
             };
         };
@@ -92,15 +59,11 @@ class MathOperations {
         return modes;    
     };
 
-    range = (digits) => {
-        return Math.max(...digits) - Math.min(...digits);
-    };
+    range = (digits) => Math.max(...digits) - Math.min(...digits);
 
     variance = (digits) => {
         const digitsMean = this.mean(digits);
-        const differencesSquared = digits.map((digit) => {
-            return this.exponent(digit - digitsMean, 2);
-        });
+        const differencesSquared = digits.map((digit) => this.exponent(digit - digitsMean, 2));
         const totalDifferencesSquared = this.addMultiple(differencesSquared);
         const variance = totalDifferencesSquared / differencesSquared.length;
         

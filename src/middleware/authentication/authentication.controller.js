@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const jwt = require('jsonwebtoken');
 
 class AuthenticationController {
@@ -12,11 +10,11 @@ class AuthenticationController {
     };
 
     generateAccessToken = () => {
-        return jwt.sign({ name: this.req.query.user}, this.secretAccessToken, { expiresIn: this.time });
+        return jwt.sign({ name: this.req.query.user }, this.secretAccessToken, { expiresIn: this.time });
     };
 
     generateRefreshToken = () => {
-        return jwt.sign({ name: this.req.query.user}, this.secretRefreshToken);
+        return jwt.sign({ name: this.req.query.user }, this.secretRefreshToken);
     };
 
     verifyToken = (token, type) => {

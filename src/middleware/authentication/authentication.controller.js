@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { addToTokensTable } = require('../../db/db.js');
+const { testDB } = require('../../db/db.js');
 
 class AuthenticationController {
     constructor(req, res) {
@@ -33,12 +33,12 @@ class AuthenticationController {
     };
 
     // both need DB calls to check refreshTokens
-    requestTokens = (ipAddress) => {
+    requestTokens = async () => {
         const accessToken = this.generateAccessToken();
         const refreshToken = this.generateRefreshToken();
-        const table = addToTokensTable(this.req.query.user, ipAddress, accessToken, refreshToken)
-        // this.refreshTokens.push(refreshToken);
-        this.res.json({ accessToken, refreshToken, table });
+        let test = await testDB();
+        console.log(test)
+        this.res.json({ accessToken, refreshToken });
     };
 
     refreshToken = () => {

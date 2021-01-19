@@ -6,7 +6,9 @@ const databaseConfig = {
     password: process.env.TEST_DB_PASS,
     host: process.env.TEST_DB_HOST,
     port: process.env.TEST_DB_PORT,
-    database: process.env.TEST_DB_NAME
+    database: process.env.TEST_DB_NAME,
+    max: 10,
+    idleTimeoutMillis: 30000 
 };
 const pool = new Pool(databaseConfig);
 

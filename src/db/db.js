@@ -1,87 +1,29 @@
 const pool = require('./config.js');
 
-pool.on('connect', () => {
-  console.log('connected to the db');
-});
+const createTable = `CREATE TABLE IF NOT EXISTS tokens
+(id SERIAL NOT NULL PRIMARY KEY, 
+name VARCHAR(100) NOT NULL, 
+access_token VARCHAR(225) NOT NULL,
+refresh_token VARCHAR(225) NOT NULL,
+created_on TIMESTAMPTZ DEFAULT Now())`;
 
-/**
- * Basic Pool Query Structure
- * @param {string} query
- * @return {object}
- */
-const poolQuery = (query) => {
-  return pool.query(query)
-    .then((res) => {
-      console.log(res);
-      pool.end();
-    })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
-};
+const dropTable = `DROP TABLE IF EXISTS tokens`;
 
-/**
- * Create Tokens Table
- */
-const createTokensTable = () => {
-  const tokenCreateQuery = `CREATE TABLE IF NOT EXISTS tokens
-  (id SERIAL PRIMARY KEY, 
-  name VARCHAR(100) NOT NULL, 
-  ip_address VARCHAR(50), 
-  access_token VARCHAR(225) NOT NULL,
-  refresh_token VARCHAR(225) NOT NULL,
-  created_on TIMESTAMPTZ DEFAULT Now())`;
+const addRow = `INSERT INTO tokens(name, access_token, refresh_token) VALUES ('tom', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVG9tIiwiaWF0IjoxNjExMDI0Njk2LCJleHAiOjE2MTExMjQ2OTZ9.WsPf5nERBoFHSNXzQtmOkGUEeGTY8zDCO3wGkQww3t8', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVG9tIiwiaWF0IjoxNjExMDI0Njk2fQ.dIz-q4A23XdvvlPOgsoYo7DhMBz0lLe9tW_JvN0FgeQ') RETURNING *`;
 
-  poolQuery(tokenCreateQuery);
-};
+const testDB = async() => {
+    try {
+        console.log('before connection');
+        const result = await pool.query('SELECT $1::text as status', ['connected']);
+        console.log('connected')
+        await pool.query(dropTable);
+        await pool.query(createTable);
+        const addNewRow = await pool.query(addRow);
+        return addNewRow.rows; 
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+        return null;
+    }
+}
 
-const addToTokensTable = async (params) => {
-    const addTokenQuery = `INSERT INTO tokens (name, ip_address, access_token, refresh_token) 
-    VALUES (${params.name}, ${params.ip_address}, ${params.access_token}, ${params.refresh_token})`;
-
-    poolQuery(addTokenQuery);
-    return poolQuery('SELECT * FROM tokens');
-};
-
-const deleteFromTokensTable = (params) => {
-    const deleteTokenQuery = `DELETE FROM tokens 
-    WHERE name = ${params.name} 
-    AND ip_address = ${params.ip_address}`;
-
-    poolQuery(deleteTokenQuery);
-};
-
-
-/**
- * Drop Tokens Table
- */
-const dropTokensTable = () => {
-  const tokensDropQuery = 'DROP TABLE IF EXISTS tokens';
-  poolQuery(tokensDropQuery);
-};
-
-/**
- * Create All Tables
- */
-const createAllTables = () => createTokensTable();
-
-
-/**
- * Drop All Tables
- */
-const dropAllTables = () => dropTokensTable();
-
-pool.on('remove', () => {
-  console.log('client removed');
-  process.exit(0);
-});
-
-
-module.exports = {
-    addToTokensTable,
-    createAllTables,
-    dropAllTables,
-};
-
-require('make-runnable');
+module.exports = { testDB };

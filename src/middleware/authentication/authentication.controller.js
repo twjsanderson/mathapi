@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { testDB } = require('../../db/db.js');
+
+// Controllers
+const DatabaseController = require('../../db/databaseController.js');
+const { addRow, createTable, dropTable } = new DatabaseController;
 
 class AuthenticationController {
     constructor(req, res) {
@@ -20,12 +23,8 @@ class AuthenticationController {
 
     verifyToken = (token, type) => {
         let secrect;
-        if (type === 'accessToken') {
-            secrect = this.secretAccessToken;
-        }
-        if (type === 'refreshToken') {
-            secrect = this.secretRefreshToken;
-        }
+        if (type === 'accessToken') secrect = this.secretAccessToken;
+        if (type === 'refreshToken') secrect = this.secretRefreshToken;
         return jwt.verify(token, secrect, (err, user) => {
             if (err) return { err: err };
             if (user) return { user: user };
@@ -36,8 +35,10 @@ class AuthenticationController {
     requestTokens = async () => {
         const accessToken = this.generateAccessToken();
         const refreshToken = this.generateRefreshToken();
-        let test = await testDB();
-        console.log(test)
+        createTable()
+        const newRow = await addRow(this.req.query.user, accessToken, refreshToken);
+        console.log(newRow.rows[0])
+        dropTable();
         this.res.json({ accessToken, refreshToken });
     };
 

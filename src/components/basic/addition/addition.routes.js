@@ -8,12 +8,12 @@ const { simpleAddition, multipleAddition } = new Addition;
 
 // POST SIMPLE ADDITION
 router.post('/add/simple', (req, res) => {
-    return addition.simpleAddition(req, res);
+    return simpleAddition(req, res);
 });
 
 // POST MULTIPLE ADDITION
 router.post('/add/multiple', (req, res) => {
-    return addition.multipleAddition(req, res);
+    return multipleAddition(req, res);
 });
 
 module.exports = router;

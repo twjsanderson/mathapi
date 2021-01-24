@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 // Controllers
-const DatabaseController = require('../../db/databaseController.js');
-const { addRow, createTable, dropTable } = new DatabaseController;
+const AuthenticationModel = require('./authentication.model.js');
+
+const { createRow, createTable, dropTable, getTable, getRow } = new AuthenticationModel;
 
 class AuthenticationController {
     constructor(req, res) {
@@ -14,11 +15,11 @@ class AuthenticationController {
     };
 
     generateAccessToken = () => {
-        return jwt.sign({ name: this.req.query.user }, this.secretAccessToken, { expiresIn: this.time });
+        return jwt.sign({ name: this.req.query.user, pass: this.req.query.pass }, this.secretAccessToken, { expiresIn: this.time });
     };
 
     generateRefreshToken = () => {
-        return jwt.sign({ name: this.req.query.user }, this.secretRefreshToken);
+        return jwt.sign({ name: this.req.query.user, pass: this.req.query.pass }, this.secretRefreshToken);
     };
 
     verifyToken = (token, type) => {
@@ -31,25 +32,28 @@ class AuthenticationController {
         });
     };
 
-    // both need DB calls to check refreshTokens
     requestTokens = async () => {
         const accessToken = this.generateAccessToken();
         const refreshToken = this.generateRefreshToken();
-        createTable()
-        const newRow = await addRow(this.req.query.user, accessToken, refreshToken);
-        console.log(newRow.rows[0])
-        dropTable();
+        const create = await createTable();
+        const newRow = await createRow(this.req.query.user, this.req.query.pass, accessToken, refreshToken);
+        // const drop = await dropTable();
+        const get = await getTable();
+        console.log(create, newRow, get)
         this.res.json({ accessToken, refreshToken });
     };
 
-    refreshToken = () => {
+    refreshToken = async () => {
         const refreshToken = this.req.body.refreshToken;
-        if (refreshToken === null) return this.res.sendStatus(401)
-        // if (!this.refreshTokens.includes(refreshToken)) return this.res.sendStatus(403)
-        const token = this.verifyToken(refreshToken, 'refreshToken');
-        if (token.err) return this.res.sendStatus(403)
-        const accessToken = this.generateAccessToken()
-        return this.res.json({ accessToken: accessToken })
+        if (!refreshToken || refreshToken === null) return this.res.sendStatus(401)
+        const currRow = await getRow(refreshToken);
+        if (currRow !== undefined) {
+            const curr_access_token = currRow.rows[0].access_token;
+            const token = this.verifyToken(refreshToken, 'refreshToken');
+            if (token.err) return this.res.sendStatus(401);
+            const accessToken = this.generateAccessToken();
+            return this.res.json({ accessToken: curr_access_token });
+        }
     };
 
     deleteRefreshToken = () => {

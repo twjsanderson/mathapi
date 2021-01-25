@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 // Controllers
 const AuthenticationModel = require('./authentication.model.js');
 
-const { createRow, createTable, dropTable, getTable, getRow } = new AuthenticationModel;
+const { createRow, createTable, dropTable, getTable, getRowFromToken, getRowWithUserPass } = new AuthenticationModel;
 
 class AuthenticationController {
     constructor(req, res) {
@@ -15,11 +15,11 @@ class AuthenticationController {
     };
 
     generateAccessToken = () => {
-        return jwt.sign({ name: this.req.query.user, pass: this.req.query.pass }, this.secretAccessToken, { expiresIn: this.time });
+        return jwt.sign({ name: this.req.query.user }, this.secretAccessToken, { expiresIn: this.time });
     };
 
     generateRefreshToken = () => {
-        return jwt.sign({ name: this.req.query.user, pass: this.req.query.pass }, this.secretRefreshToken);
+        return jwt.sign({ name: this.req.query.user }, this.secretRefreshToken);
     };
 
     verifyToken = (token, type) => {
@@ -31,21 +31,51 @@ class AuthenticationController {
             if (user) return { user: user };
         });
     };
+    // create an error handler to 
+    // - create DB table if does not exist
+    // - 
 
-    requestTokens = async () => {
-        const accessToken = this.generateAccessToken();
-        const refreshToken = this.generateRefreshToken();
-        const create = await createTable();
-        const newRow = await createRow(this.req.query.user, this.req.query.pass, accessToken, refreshToken);
-        // const drop = await dropTable();
-        const get = await getTable();
-        console.log(create, newRow, get)
-        this.res.json({ accessToken, refreshToken });
+    // is there user and pass?
+    //  - if yes,
+    //      - does user already exist?
+    //          - if yes, is this the correct password?
+    //              - if yes, send tokens
+    //              - if no, throw error
+    //          - if no, create new user
+    //              - send tokens
+    //  - if no, throw error
+
+    createAccount = async () => {
+
     };
 
-    refreshToken = async () => {
+    signIn = async () => {
+        // check user and password exist in request
+        if (!this.req.query.user || !this.req.query.pass) return this.res.sendStatus(401);
+        
+        // check if user and pass exist in DB / are correct ***NEED BCRYPT HERE
+        const checkUserPass = getRowWithUserPass(this.req.query.user, this.req.query.pass);
+        if (checkUserPass.severity) return this.res.sendStatus(402);
+        
+        // generate tokens
+        const accessToken = this.generateAccessToken();
+        const refreshToken = this.generateRefreshToken();
+
+
+        const createNewRow = await createRow(this.req.query.user, this.req.query.pass, accessToken, refreshToken);
+        const getNewRow = await getRowFromToken(refreshToken);
+        if (createNewRow.severity || getNewRow.severity) return this.res.sendStatus(400);
+        const newRow = getNewRow.rows[0];
+        return this.res.json({ 
+            user: newRow.name, 
+            accessToken: newRow.access_token, 
+            refreshToken: newRow.refresh_token 
+        });
+    };
+
+    refresh = async () => {
         const refreshToken = this.req.body.refreshToken;
-        if (!refreshToken || refreshToken === null) return this.res.sendStatus(401)
+        if (!refreshToken || refreshToken === null) return this.res.sendStatus(401);
         const currRow = await getRow(refreshToken);
         if (currRow !== undefined) {
             const curr_access_token = currRow.rows[0].access_token;
@@ -56,7 +86,7 @@ class AuthenticationController {
         }
     };
 
-    deleteRefreshToken = () => {
+    signOut = () => {
         const refreshToken = this.req.body.refreshToken;
         // DB call to delete token
         res.sendStatus(204)

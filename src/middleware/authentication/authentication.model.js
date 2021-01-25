@@ -29,11 +29,23 @@ class AuthenticationModel extends Database {
         return await this.poolQuery(createRow);
     };  
 
-    getRow = async (refresh_token) => {
+    dropRow = async (user, pass, ) => {
+
+    };
+
+    getRowFromToken = async (refresh_token) => {
         const getRow = `SELECT * FROM tokens
             WHERE refresh_token = '${refresh_token}'`;
         return await this.poolQuery(getRow);
     }; 
+
+    getRowWithUserPass = async (user, pass) => {
+        const getRow = `SELECT * FROM tokens
+            WHERE name = '${user}' AND password='${pass}'`;
+        return await this.poolQuery(getRow);
+    }; 
+
+    updateRowWithUserPaa
 }
 
 module.exports = AuthenticationModel;

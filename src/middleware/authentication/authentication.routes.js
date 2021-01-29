@@ -5,11 +5,11 @@ const router = express.Router();
 const AuthenticationController = require('./authentication.controller');
 
 // POST - REQUEST ACCESS & REFRESH TOKENS
-router.post('/auth/signIn', (req, res) => {
+router.post('/auth/getTokens', (req, res) => {
 //    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if (!req.query.user) return res.sendStatus(400);
     const authentication = new AuthenticationController(req, res);
-    return authentication.signIn();
+    return authentication.getTokens();
 });
 
 // POST - REFRESH AN EXISTING ACCESS TOKEN
@@ -20,7 +20,7 @@ router.post('/auth/refresh', (req, res) => {
 });
 
 // DELETE - 
-router.delete('/auth/signOut', (req, res) => {
+router.delete('/auth/deleteTokens', (req, res) => {
     const authentication = new AuthenticationController(req, res);
     
 });

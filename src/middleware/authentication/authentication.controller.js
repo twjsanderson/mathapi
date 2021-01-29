@@ -2,8 +2,12 @@ const jwt = require('jsonwebtoken');
 
 // Controllers
 const AuthenticationModel = require('./authentication.model.js');
+const Encryption = require('../../util/encryption');
+const { compare } = require('bcrypt');
 
-const { createRow, createTable, dropTable, getTable, getRowFromToken, getRowWithUserPass } = new AuthenticationModel;
+const { hash } = new Encryption; 
+
+const { createRow, createTable, dropTable, getTable, getRowFromToken, getRowFromUserPass, deleteRowFromUserPass } = new AuthenticationModel;
 
 class AuthenticationController {
     constructor(req, res) {
@@ -31,65 +35,63 @@ class AuthenticationController {
             if (user) return { user: user };
         });
     };
-    // create an error handler to 
-    // - create DB table if does not exist
-    // - 
 
-    // is there user and pass?
-    //  - if yes,
-    //      - does user already exist?
-    //          - if yes, is this the correct password?
-    //              - if yes, send tokens
-    //              - if no, throw error
-    //          - if no, create new user
-    //              - send tokens
-    //  - if no, throw error
-
-    createAccount = async () => {
-
-    };
-
-    signIn = async () => {
+    getTokens = async () => {
         // check user and password exist in request
         if (!this.req.query.user || !this.req.query.pass) return this.res.sendStatus(401);
         
-        // check if user and pass exist in DB / are correct ***NEED BCRYPT HERE
-        const checkUserPass = getRowWithUserPass(this.req.query.user, this.req.query.pass);
-        if (checkUserPass.severity) return this.res.sendStatus(402);
-        
         // generate tokens
-        const accessToken = this.generateAccessToken();
-        const refreshToken = this.generateRefreshToken();
+        const newAccessToken = this.generateAccessToken();
+        const newRefreshToken = this.generateRefreshToken();
 
-
-        const createNewRow = await createRow(this.req.query.user, this.req.query.pass, accessToken, refreshToken);
-        const getNewRow = await getRowFromToken(refreshToken);
-        if (createNewRow.severity || getNewRow.severity) return this.res.sendStatus(400);
-        const newRow = getNewRow.rows[0];
+        const hashedPassword = await hash(this.req.query.pass);
+        const checkUserPass = await getRowFromUserPass(this.req.query.user, hashedPassword);
+        console.log(checkUserPass)
+        if (checkUserPass.severity) {
+            // if no user create new user with creds and tokens
+            const createNewRow = await createRow(this.req.query.user, hashedPassword, newAccessToken, newRefreshToken);
+            // else throw error
+            if (createNewRow.severity) return this.res.sendStatus(400);
+        }
+        
+        // return user, access_token, refresh_token
         return this.res.json({ 
-            user: newRow.name, 
-            accessToken: newRow.access_token, 
-            refreshToken: newRow.refresh_token 
+            user: this.req.query.user, 
+            accessToken: newAccessToken, 
+            refreshToken: newRefreshToken
         });
     };
 
     refresh = async () => {
         const refreshToken = this.req.body.refreshToken;
         if (!refreshToken || refreshToken === null) return this.res.sendStatus(401);
-        const currRow = await getRow(refreshToken);
-        if (currRow !== undefined) {
-            const curr_access_token = currRow.rows[0].access_token;
-            const token = this.verifyToken(refreshToken, 'refreshToken');
-            if (token.err) return this.res.sendStatus(401);
-            const accessToken = this.generateAccessToken();
-            return this.res.json({ accessToken: curr_access_token });
-        }
+
+        // get user data from refresh token
+        const checkUserExists = await getRowFromToken(refreshToken);
+        if (checkUserExists.severity) return this.res.sendStatus(400);
+
+        // verify refresh token
+        const token = this.verifyToken(refreshToken, 'refreshToken');
+        if (token.err) return this.res.sendStatus(401);
+
+        // create new access token and update DB
+        const newAccessToken = this.generateAccessToken();
+        const { name } = checkUserExists;
+        
+        const updatedRow = await updateRowWithToken(name);
+        if (updatedRow.severity) return this.res.sendStatus(401);
+
+        return this.res.json({ accessToken: newAccessToken });
     };
 
-    signOut = () => {
-        const refreshToken = this.req.body.refreshToken;
-        // DB call to delete token
-        res.sendStatus(204)
+    deleteTokens = async () => {
+        const { name, password } = await getRowFromUser(this.req.query.user);
+        const hashedPassword = await compareHash(this.req.query.pass, password);
+        if (hashedPassword) {
+            await deleteRowFromUserPass(name, hashedPassword)
+            this.res.sendStatus(204)
+        }
+        return this.res.sendStatus(403);
     }
 
 };

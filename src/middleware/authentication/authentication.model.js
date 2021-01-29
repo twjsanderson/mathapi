@@ -8,7 +8,7 @@ class AuthenticationModel extends Database {
             password VARCHAR(225) NOT NULL, 
             access_token VARCHAR(225) NOT NULL,
             refresh_token VARCHAR(225) NOT NULL,
-            created_on TIMESTAMPTZ DEFAULT Now(),
+            updated_on TIMESTAMPTZ DEFAULT Now(),
             UNIQUE (name, access_token, refresh_token))`;
         return await this.poolQuery(createTable);
     };
@@ -39,13 +39,40 @@ class AuthenticationModel extends Database {
         return await this.poolQuery(getRow);
     }; 
 
-    getRowWithUserPass = async (user, pass) => {
+    getRowFromUserPass = async (user, pass) => {
         const getRow = `SELECT * FROM tokens
             WHERE name = '${user}' AND password='${pass}'`;
         return await this.poolQuery(getRow);
     }; 
 
-    updateRowWithUserPaa
+    getRowFromUser = async (user) => {
+        const getRow = `SELECT * FROM tokens
+            WHERE name = '${user}'`;
+        return await this.poolQuery(getRow);
+    }; 
+
+    updateRowWithToken = async (user, access_token) => {
+        const updateRow = `UPDATE tokens
+            SET (access_token = '${access_token}',
+                updated_on = TIMESTAMPTZ DEFAULT Now())
+            WHERE name = '${user}'`;
+        return await this.poolQuery(updateRow);
+    };
+
+    updateRowWithUserPass = async (user, pass, newUser, newPass) => {
+        const updateRow = `UPDATE tokens
+            SET (name = '${newUser}',
+                password = '${newPass}',
+                updated_on = TIMESTAMPTZ DEFAULT Now())
+            WHERE name = '${user}' AND password '${pass}'`;
+        return await this.poolQuery(updateRow);
+    };
+
+    deleteRowFromUserPass = async (user, pass) => {
+        const deleteRow = `DELETE from tokens
+            WHERE name = '${user}' AND password '${pass}'`;
+        return await this.poolQuery(deleteRow);
+    }
 }
 
 module.exports = AuthenticationModel;

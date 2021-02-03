@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-// Controllers
 const AuthenticationModel = require('./authentication.model.js');
 const Encryption = require('../../util/encryption');
-const { compare } = require('bcrypt');
 
 const { hash } = new Encryption; 
 
@@ -37,18 +35,19 @@ class AuthenticationController {
     };
 
     getTokens = async () => {
-        // check user and password exist in request
+        // check user and password exist in request, this to be handled elsewhere
         if (!this.req.query.user || !this.req.query.pass) return this.res.sendStatus(401);
         
-        // generate tokens
+        // creds
         const newAccessToken = this.generateAccessToken();
         const newRefreshToken = this.generateRefreshToken();
-
         const hashedPassword = await hash(this.req.query.pass);
-        const checkUserPass = await getRowFromUserPass(this.req.query.user, hashedPassword);
-        console.log(checkUserPass)
+        const userName = this.req.query.user;
+
+        const checkUserPass = await getRowFromUserPass(userName, hashedPassword);
+        
+         // if no user, create new user with creds and tokens DB check
         if (checkUserPass.severity) {
-            // if no user create new user with creds and tokens
             const createNewRow = await createRow(this.req.query.user, hashedPassword, newAccessToken, newRefreshToken);
             // else throw error
             if (createNewRow.severity) return this.res.sendStatus(400);

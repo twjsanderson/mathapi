@@ -8,7 +8,7 @@ class Addition {
 
     // Simple Addition
     simpleAddition = (req, res) => {
-        const x = req.que
+        const x = req.query.x;
         const y = req.query.y;
         
         // input check, update tyep check
@@ -19,7 +19,7 @@ class Addition {
             });
         } else {
             const answer = math.add(Number(x), Number(y));
-            res.send({ 
+            res.status(200).send({ 
                 operation: 'addition',
                 answer: answer 
             });

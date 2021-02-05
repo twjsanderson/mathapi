@@ -6,13 +6,13 @@ const Addition = require("./addition.controller");
 
 const { simpleAddition, multipleAddition } = new Addition;
 
-// POST SIMPLE ADDITION
-router.post('/add/simple', (req, res) => {
+// GET SIMPLE ADDITION
+router.get('/add/simple', (req, res) => {
     return simpleAddition(req, res);
 });
 
-// POST MULTIPLE ADDITION
-router.post('/add/multiple', (req, res) => {
+// GET MULTIPLE ADDITION
+router.get('/add/multiple', (req, res) => {
     return multipleAddition(req, res);
 });
 

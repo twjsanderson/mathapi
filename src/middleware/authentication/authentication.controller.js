@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken');
 
 const AuthenticationModel = require('./authentication.model.js');
 const Encryption = require('../../util/encryption');
+const ApiError = require('../../util/error/ApiError');
 
 const { hash } = new Encryption; 
-
+const { badRequest, unauthorized } = ApiError;
 const { createRow, createTable, dropTable, getTable, getRowFromToken, getRowFromUserPass, deleteRowFromUserPass } = new AuthenticationModel;
 
 class AuthenticationController {
@@ -16,13 +17,9 @@ class AuthenticationController {
         this.secretRefreshToken = process.env.REFRESH_TOKEN_SECRET;
     };
 
-    generateAccessToken = () => {
-        return jwt.sign({ name: this.req.query.user }, this.secretAccessToken, { expiresIn: this.time });
-    };
+    generateAccessToken = () => jwt.sign({ name: this.req.query.user }, this.secretAccessToken, { expiresIn: this.time });
 
-    generateRefreshToken = () => {
-        return jwt.sign({ name: this.req.query.user }, this.secretRefreshToken);
-    };
+    generateRefreshToken = () => jwt.sign({ name: this.req.query.user }, this.secretRefreshToken);
 
     verifyToken = (token, type) => {
         let secrect;

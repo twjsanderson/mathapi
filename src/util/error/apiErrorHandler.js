@@ -6,6 +6,7 @@ const apiErrorHandler = (err, req, res, next) => {
   console.error(err);
 
   if (err instanceof ApiError) {
+    console.log(err)
     res.status(err.code).json(err.message);
     return;
   }

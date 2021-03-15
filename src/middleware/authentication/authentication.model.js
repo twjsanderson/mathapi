@@ -29,7 +29,7 @@ class AuthenticationModel extends Database {
         return await this.poolQuery(createRow);
     };  
 
-    dropRow = async (user, pass, ) => {
+    dropRow = async (user, pass) => {
 
     };
 

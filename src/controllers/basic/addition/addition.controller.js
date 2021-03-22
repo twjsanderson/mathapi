@@ -1,27 +1,29 @@
 const MathOperations = require("../../../util/math");
 const Helpers = require("../../../util/helpers");
-const ApiSuccess = require('../../../util/success/ApiSuccess');
+const ApiSuccess = require('../../../util/http/success/ApiSuccess');
+const ApiError = require("../../../util/http/error/ApiError");
 
 const { add, addMultiple } = new MathOperations; 
 const { stringToNumArray } = new Helpers;
+const { notFound } = ApiError;
 
 class Addition {
 
     // Simple Addition
-    simpleAddition = (req, res) => {
+    simpleAddition = (req, res, next) => {
         const { success } = new ApiSuccess(res);
         const x = req.query.x;
         const y = req.query.y;
-        
-        
-        if (Number(x) < -100000000000 || Number(x) > 100000000000 || Number(y) < -100000000000 || Number(y) > 100000000000) {
-            res.send({
-                operation: 'addition',
-                error: 'The size of one or more queries is out of range'  
-            });
-        } else {
+    
+        if (Number(x) === 10) {
+            notFound('simpleAddition')
+            // res.send({
+            //     operation: 'addition',
+            //     error: 'The size of one or more queries is out of range'  
+            // });
+        } else if (Number(x) !== 10) {
             const answer = add(Number(x), Number(y));
-            success(200, 'addition', answer);
+            success(200, 'simpleAddition', answer);
         }
     };
 

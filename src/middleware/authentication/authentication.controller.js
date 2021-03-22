@@ -2,10 +2,9 @@ const jwt = require('jsonwebtoken');
 
 const AuthenticationModel = require('./authentication.model.js');
 const Encryption = require('../../util/encryption');
-const ApiError = require('../../util/error/ApiError');
+const ApiError = require('../../util/http/error/ApiError');
 
 const { hash } = new Encryption; 
-const { badRequest, unauthorized } = ApiError;
 const { createRow, createTable, dropTable, getTable, getRowFromToken, getRowFromUserPass, deleteRowFromUserPass } = new AuthenticationModel;
 
 class AuthenticationController {

@@ -3,10 +3,10 @@ class ApiSuccess {
         this.res = res;
     }
 
-    success = (code, operation, type) => {
+    success = (code, operation, answer) => {
         return this.res.status(code).send({
             operation,
-            type
+            answer
         });
     };
 };

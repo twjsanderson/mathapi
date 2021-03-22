@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser')
 const cors = require('cors');
-const apiErrorHandler = require('./src/util/error/apiErrorHandler');
+const errorHandler = require('./src/middleware/error/errorHandler');
 
 // config 
 const { port } = require('./src/config/index.js');
@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', routes);
 
-app.use(apiErrorHandler);
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`app listening on port ${port}`)

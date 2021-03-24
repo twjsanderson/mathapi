@@ -1,4 +1,4 @@
-const ApiError = require('../../util/http/error/ApiError');
+const ApiError = require('../../util/httpResponses/error/ApiError');
 
 const errorHandler = (err, req, res, next) => {
   // in prod, don't use console.log or console.err because

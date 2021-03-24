@@ -1,11 +1,11 @@
 const MathOperations = require("../../../util/math");
 const Helpers = require("../../../util/helpers");
-const ApiSuccess = require('../../../util/http/success/ApiSuccess');
-const ApiError = require("../../../util/http/error/ApiError");
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ApiError = require("../../../util/httpResponses/error/ApiError");
 
 const { add, addMultiple } = new MathOperations; 
 const { stringToNumArray } = new Helpers;
-const { notFound } = ApiError;
+const { badRequest } = ApiError;
 
 class Addition {
 
@@ -16,7 +16,7 @@ class Addition {
         const y = req.query.y;
     
         if (Number(x) === 10) {
-            notFound('simpleAddition')
+            badRequest('simpleAddition')
             // res.send({
             //     operation: 'addition',
             //     error: 'The size of one or more queries is out of range'  

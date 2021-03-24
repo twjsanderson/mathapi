@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const AuthenticationModel = require('./authentication.model.js');
 const Encryption = require('../../util/encryption');
-const ApiError = require('../../util/http/error/ApiError');
+const ApiError = require('../../util/httpResponses/error/ApiError');
 
 const { hash } = new Encryption; 
 const { createRow, createTable, dropTable, getTable, getRowFromToken, getRowFromUserPass, deleteRowFromUserPass } = new AuthenticationModel;

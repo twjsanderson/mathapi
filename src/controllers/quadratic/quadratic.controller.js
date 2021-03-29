@@ -1,35 +1,28 @@
-const MathOperations = require("../../util/math");
+const MathOperations = require('../../util/math');
+const ApiSuccess = require('../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../error/error.controller');
 
-const math = new MathOperations; 
+const { quadraticFormula } = MathOperations; 
 
 class Quadratic {
 
-    // Quadradtic Function
-    quadraticFunction = (req, res) => {
-        const a = req.query.a;
-        const b = req.query.b;
-        const c = req.query.c;
+    /**
+     * Quadradtic Function
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    quadraticFunction = (req, res, next) => {
+        const a = Number(req.query.a);
+        const b = Number(req.query.b);
+        const c = Number(req.query.c);
+        const { success } = new ApiSuccess(res);
+        const { quadraticErrorHandler } = new ErrorController(res, 'quadraticFormula');
+        
+        quadraticErrorHandler([a, b, c]);
+        const answer = quadraticFormula(a, b, c);
+        success(200, 'quadraticFormula', answer);
 
-        // input check, update tyep check
-        if (
-            Number(a) < -100000 || 
-            Number(a) > 100000 || 
-            Number(b) < -100000 || 
-            Number(b) > 100000 || 
-            Number(c) < -100000 || 
-            Number(c) > 100000
-        ) {
-            res.send({
-                operation: 'quadratic formula',
-                error: 'The size of one or more queries is out of range'  
-            });
-        } else {
-            const answer = math.quadraticFormula(Number(a), Number(b), Number(c));
-            res.send({ 
-                operation: 'quadratic formula',
-                answer: answer 
-            });
-        }
     };
 };
 

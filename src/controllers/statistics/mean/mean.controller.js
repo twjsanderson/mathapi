@@ -1,29 +1,28 @@
-const MathOperations = require("../../../util/math");
-const Helpers = require("../../../util/helpers");
+const MathOperations = require('../../../util/math');
+const Helpers = require('../../../util/helpers');
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../../error/error.controller');
 
-const math = new MathOperations; 
-const helpers = new Helpers;
+const { mean } = MathOperations; 
+const { stringToNumArray } = Helpers;
 
 class Mean {
     
-    // Mean
+    /**
+     * Simple Mean
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     simpleMean = (req, res) => {
         const x = req.query.x;
+        const { success } = new ApiSuccess(res);
+        const { meanErrorHandler, notArray } = new ErrorController(res, 'mean');
 
-        // input check, array check, item size check
-        if (!x) {
-            res.send({
-                operation: 'mean',
-                error: 'One or more query size is out of range' 
-            });
-        } else {
-            const numArray = helpers.stringToNumArray(x);
-            const answer = math.mean(numArray);
-            res.send({ 
-                operation: 'mean',
-                answer: answer 
-            });
-        }
+        const numArray = (typeof x === undefined || typeof x === null) ? notArray(x) : stringToNumArray(x);
+        meanErrorHandler(numArray);
+        const answer = mean(numArray);
+        success(200, 'mean', answer);
     };
 };
 

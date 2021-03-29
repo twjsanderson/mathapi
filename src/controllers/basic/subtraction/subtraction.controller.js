@@ -1,49 +1,45 @@
-const MathOperations = require("../../../util/math");
-const Helpers = require("../../../util/helpers");
+const MathOperations = require('../../../util/math');
+const Helpers = require('../../../util/helpers');
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../../error/error.controller');
 
-const math = new MathOperations; 
-const helpers = new Helpers;
+const { subtract, subtractMultiple } = MathOperations; 
+const { stringToNumArray } = Helpers;
 
 class Subtraction {
 
-    // Simple Subtraction
-    simpleSubtraction = (req, res) => {
-        const x = req.query.x;
-        const y = req.query.y;
-
-        // input check, update tyep check
-        if (Number(x) < -100000000000 || Number(x) > 100000000000 || Number(y) < -100000000000 || Number(y) > 100000000000) {
-            res.send({
-                operation: 'subtraction',
-                error: 'The size of one or more queries is out of range' 
-            });
-        } else {
-            const answer = math.subtract(Number(x), Number(y));
-            res.send({ 
-                operation: 'subtraction',
-                answer: answer 
-            });
-        }
+   /**
+     * Simple Subtraction
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    simpleSubtraction = (req, res, next) => {
+        const x = Number(req.query.x);
+        const y = Number(req.query.y);
+        const { success } = new ApiSuccess(res);
+        const { numbersErrorHandler } = new ErrorController(res, 'simpleSubtraction');
+        
+        numbersErrorHandler(x, y);
+        const answer = subtract(x, y);
+        success(200, 'simpleSubtraction', answer);
     };
 
-    // Multiple Subtraction
-    multipleSubtraction = (req, res) => {
+    /**
+     * Multiple Subtraction
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+     multipleSubtraction = (req, res, next) => {
         const x = req.query.x;
-
-        // input check, array check, item size check
-        if (!x) {
-            res.send({
-                operation: 'multiple subtraction',
-                error: 'The size of one or more queries is out of range' 
-            });
-        } else {
-            const numArray = helpers.stringToNumArray(x);
-            const answer = math.subtractMultiple(numArray);
-            res.send({ 
-                operation: 'multiple subtraction',
-                answer: answer 
-            });
-        }
+        const { success } = new ApiSuccess(res);
+        const { arrayErrorHandler, notArray } = new ErrorController(res, 'multipleSubtraction');
+        
+        const numArray = (typeof x === undefined || typeof x === null) ? stringToNumArray(x) : notArray(x);
+        arrayErrorHandler(numArray);
+        const answer = subtractMultiple(numArray);
+        success(200, 'multipleSubtraction', answer);
     };
 };
 

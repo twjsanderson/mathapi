@@ -1,27 +1,26 @@
 const MathOperations = require("../../../util/math");
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../../error/error.controller');
 
-const math = new MathOperations; 
+const { exponent } = MathOperations; 
 
 class Exponent {
     
-    // Simple Exponent
+     /**
+     * Simple Exponent
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     simpleExponent = (req, res) => {
-        const base = req.query.base;
-        const exponent = req.query.exponent;
-
-        // input check, update tyep check
-        if (Number(base) < -100000000000 || Number(base) > 100000000000 || Number(exponent) < -100000000000 || Number(exponent) > 100000000000) {
-            res.send({
-                operation: 'exponent',
-                error: 'The size of one or more queries is out of range'  
-            });
-        } else {
-            const answer = math.exponent(Number(base), Number(exponent));
-            res.send({ 
-                operation: 'exponent',
-                answer: answer 
-            });
-        }
+        const base = Number(req.query.base);
+        const exp = Number(req.query.exponent);
+        const { success } = new ApiSuccess(res);
+        const { exponentErrorHandler } = new ErrorController(res, 'simpleExponent');
+         
+        exponentErrorHandler(base, exp);
+        const answer = exponent(base, exp);
+        success(200, 'simpleExponent', answer);
     };
 };
 

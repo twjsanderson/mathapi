@@ -1,31 +1,31 @@
 class MathOperations {
 
-    add = (x, y) => x + y;
+    static add = (x, y) => x + y;
 
-    addMultiple = (digits) => digits.reduce((acc, curr) => acc + curr);
+    static addMultiple = (digits) => digits.reduce((acc, curr) => acc + curr);
 
-    subtract = (x, y) => x - y;
+    static subtract = (x, y) => x - y;
 
-    subtractMultiple = (digits) => digits.reduce((acc, curr) => acc - curr);
+    static subtractMultiple = (digits) => digits.reduce((acc, curr) => acc - curr);
 
-    multiply = (x, y) => x * y;
+    static multiply = (x, y) => x * y;
 
-    multiplyMultiple = (digits) => digits.reduce((acc, curr) => acc * curr);
+    static multiplyMultiple = (digits) => digits.reduce((acc, curr) => acc * curr);
 
-    divide = (numerator, denominator) => numerator / denominator;
+    static divide = (numerator, denominator) => numerator / denominator;
 
-    divideMultiple = (digits) => digits.reduce((acc, curr) => acc / curr);
+    static divideMultiple = (digits) => digits.reduce((acc, curr) => acc / curr);
 
-    exponent = (base, exponent) => exponent < 0 ? 1 / Math.pow(base, -exponent) : Math.pow(base, exponent);
+    static exponent = (base, exponent) => exponent < 0 ? 1 / Math.pow(base, -exponent) : Math.pow(base, exponent);
 
-    squareRoot = (base) => Math.sqrt(base);
+    static squareRoot = (base) => Math.sqrt(base);
 
-    mean = (digits) => {
+    static mean = (digits) => {
         const digitsSum = this.addMultiple(digits);
         return digitsSum / digits.length;
     };
 
-    median = (digits) => {
+    static median = (digits) => {
         const sortedDigits = digits.sort((a, b) => a - b);
         const len = sortedDigits.length;
         const medianIndex = Math.floor(len/ 2);
@@ -35,33 +35,33 @@ class MathOperations {
         return sortedDigits[medianIndex];
     };
 
-    mode = (digits) => {
-        const hashMap = {};
-        const modes = [];
-
+    static mode = (digits) => {
+        let hashMap = {},
+            modes = [];
+        
         for (let digit of digits) {
             if (!hashMap[digit]) {
-                hashMap[digit] = 0;
+                hashMap[digit] = 1;
             } else {
                 hashMap[digit]++;
             };
         };
-
+        // console.log(hashMap)
         const maxNumOfOccurences = Math.max(...Object.values(hashMap));
-
+        
         for (let key in hashMap) {
             const num = Number(hasMap[key]);
             if (num === maxNumOfOccurences) {
                 modes.push(Number(key));
             };
         };
-
+        console.log(modes)
         return modes;    
     };
 
-    range = (digits) => Math.max(...digits) - Math.min(...digits);
+    static range = (digits) => Math.max(...digits) - Math.min(...digits);
 
-    variance = (digits) => {
+    static variance = (digits) => {
         const digitsMean = this.mean(digits);
         const differencesSquared = digits.map((digit) => this.exponent(digit - digitsMean, 2));
         const totalDifferencesSquared = this.addMultiple(differencesSquared);
@@ -70,7 +70,7 @@ class MathOperations {
         return variance;
     };
 
-    standardDeviation = (digits) => {
+    static standardDeviation = (digits) => {
         const variance = this.variance(digits);
         const stdd = this.squareRoot(variance);
 
@@ -79,7 +79,7 @@ class MathOperations {
 
     // x = ax^2 + bx + c
     // no imaginary numbers
-    quadraticFormula = (a, b, c) => {
+    static quadraticFormula = (a, b, c) => {
         const solutions = [];
 
         const exp = this.exponent(b, 2);

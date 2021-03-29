@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const asyncCatch = require('../../../util/aysncCatch');
 
 // Controllers
-const Mode = require("./mode.controller");
+const Mode = require('./mode.controller');
 
 const { simpleMode } = new Mode;
 
-// POST MODE
-router.post('/mode', (req, res) => {
-    return simpleMode(req, res);
-});
+// GET MODE
+router.get('/mode', (req, res, next) => asyncCatch(simpleMode(req, res, next)));
 
 module.exports = router;

@@ -1,49 +1,45 @@
-const MathOperations = require("../../../util/math");
-const Helpers = require("../../../util/helpers");
+const MathOperations = require('../../../util/math');
+const Helpers = require('../../../util/helpers');
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../../error/error.controller');
 
-const math = new MathOperations; 
-const helpers = new Helpers;
+const { multiply, multiplyMultiple } = MathOperations; 
+const { stringToNumArray } = Helpers;
 
 class Multiplication {
     
-    // Simple Multiplication
+    /**
+     * Simple Multiplication
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     simpleMultiplication = (req, res) => {
-        const x = req.query.x;
-        const y = req.query.y;
-
-        // input check, update tyep check
-        if (Number(x) < -100000000000 || Number(x) > 100000000000 || Number(y) < -100000000000 || Number(y) > 100000000000) {
-            res.send({
-                operation: 'multiplication',
-                error: 'The size of one or more queries is out of range'  
-            });
-        } else {
-            const answer = math.multiply(Number(x), Number(y));
-            res.send({ 
-                operation: 'multiplication',
-                answer: answer 
-            });
-        }
+        const x = Number(req.query.x);
+        const y = Number(req.query.y);
+        const { success } = new ApiSuccess(res);
+        const { numbersErrorHandler } = new ErrorController(res, 'simpleMultiplication');
+        
+        numbersErrorHandler(x, y);
+        const answer = multiply(x, y);
+        success(200, 'simpleMultiplication', answer);
     };
 
-    // Multiple Multiplication
+    /**
+     * Multiple Multiplication
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     multipleMultiplication = (req, res) => {
         const x = req.query.x;
-
-        // input check, array check, item size check
-        if (!x) {
-            res.send({
-                operation: 'multiple multiplication',
-                error: 'One or more query size is out of range' 
-            });
-        } else {
-            const numArray = helpers.stringToNumArray(x);
-            const answer = math.multiplyMultiple(numArray);
-            res.send({ 
-                operation: 'multiple multiplication',
-                answer: answer 
-            });
-        }
+        const { success } = new ApiSuccess(res);
+        const { arrayErrorHandler, notArray } = new ErrorController(res, 'multipleMultiplication');
+        
+        const numArray = (typeof x === undefined || typeof x === null) ? stringToNumArray(x) : notArray(x);
+        arrayErrorHandler(numArray);
+        const answer = multiplyMultiple(numArray);
+        success(200, 'multipleMultiplication', answer);
     };
 };
     

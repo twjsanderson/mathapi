@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const asyncCatch = require('../../../util/aysncCatch');
 
 // Controllers
-const Median = require("./median.controller");
+const Median = require('./median.controller');
 
 const { simpleMedian } = new Median;
 
-// POST MEDIAN
-router.post('/median', (req, res) => {
-    return simpleMedian(req, res);
-});
+// GET MEDIAN
+router.get('/median', (req, res, next) => asyncCatch(simpleMedian(req, res, next)));
 
 module.exports = router;

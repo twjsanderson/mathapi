@@ -1,28 +1,28 @@
-const MathOperations = require("../../../util/math");
-const Helpers = require("../../../util/helpers");
+const MathOperations = require('../../../util/math');
+const Helpers = require('../../../util/helpers');
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../../error/error.controller');
 
-const math = new MathOperations; 
-const helpers = new Helpers;
+const { mode } = MathOperations; 
+const { stringToNumArray } = Helpers;
 
 class Mode {
-    // Mode
-    simpleMode = (req, res) => {
+    /**
+     * Simple Mode
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+     simpleMode = (req, res, next) => {
         const x = req.query.x;
-
-        // input check, array check, item size check
-        if (!x) {
-            res.send({
-                operation: 'mode',
-                error: 'One or more query size is out of range' 
-            });
-        } else {
-            const numArray = helpers.stringToNumArray(x);
-            const answer = math.mode(numArray);
-            res.send({ 
-                operation: 'mode',
-                answer: answer 
-            });
-        }
+        const { success } = new ApiSuccess(res);
+        const { modeErrorHandler } = new ErrorController(res, 'simpleMode');
+        
+        const numArray = (typeof x === undefined || typeof x === null) ? notArray(x) : stringToNumArray(x);
+        modeErrorHandler(numArray);
+        console.log(Array.isArray(numArray))
+        const answer = mode(numArray);
+        success(200, 'simpleMode', answer);
     };
 };
 

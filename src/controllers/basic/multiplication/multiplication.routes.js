@@ -1,19 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const asyncCatch = require('../../../util/aysncCatch');
 
 // Controllers
 const Multiplication = require("./multiplication.controller");
 
 const { simpleMultiplication, multipleMultiplication } = new Multiplication;
 
-// POST SIMPLE MULTIPLICATION
-router.post('/multiply/simple', (req, res) => {
-    return simpleMultiplication(req, res);
-});
+// GET SIMPLE MULTIPLICATION
+router.get('/multiply/simple', (req, res) => asyncCatch(simpleMultiplication(req, res)));
 
-// POST MULTIPLE MULTIPLICATION
-router.post('/multiply/multiple', (req, res) => {
-    return multipleMultiplication(req, res);
-});
+// GET MULTIPLE MULTIPLICATION
+router.get('/multiply/multiple', (req, res) => asyncCatch(multipleMultiplication(req, res)));
 
 module.exports = router;

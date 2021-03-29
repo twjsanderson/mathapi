@@ -1,26 +1,25 @@
-const MathOperations = require("../../../util/math");
+const MathOperations = require('../../../util/math');
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../../error/error.controller');
 
-const math = new MathOperations; 
+const { squareRoot } = MathOperations;  
 
 class SquareRoot {
     
-    // Simple SquareRoot
+    /**
+     * Simple Square Root
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     simpleSquareRoot = (req, res) => {
-        const base = req.query.base;
-
-        // input check, update tyep check
-        if (Number(base) < -100000000000 || Number(base) > 100000000000) {
-            res.send({
-                operation: 'square root',
-                error: 'The size of one or more queries is out of range'  
-            });
-        } else {
-            const answer = math.squareRoot(Number(base));
-            res.send({ 
-                operation: 'square root',
-                answer: answer 
-            });
-        }
+        const base = Number(req.query.base);
+        const { success } = new ApiSuccess(res);
+        const { squareRootErrorHandler } = new ErrorController(res, 'simpleSquareRoot');
+        
+        squareRootErrorHandler(base);
+        const answer = squareRoot(base);
+        success(200, 'simpleSquareRoot', answer);
     };
 };
 

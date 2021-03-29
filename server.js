@@ -10,7 +10,6 @@ const { port } = require('./src/config/index.js');
 
 // routes
 const routes = require('./src/routes.js');
-const ErrorController = require('./src/controllers/error/error.controller');
 
 const app = express();
 

@@ -8,7 +8,7 @@ class ApiError extends Error {
   }
 
   static badRequest = (resource) => {
-    throw new ApiError(400, resource,'Resource not found')
+    throw new ApiError(400, resource,'Invalid or malformed request.')
   };
 
   static unauthorized = (resource) => {

@@ -1,4 +1,5 @@
 const ApiError = require('../../util/httpResponses/error/ApiError');
+const { internalServerError } = require('../../util/httpResponses/error/ApiError');
 
 const errorHandler = (err, req, res, next) => {
   // in prod, don't use console.log or console.err because
@@ -14,7 +15,8 @@ const errorHandler = (err, req, res, next) => {
     return;
   }
 
-  res.status(500).json('Internal Server Error');
+  internalServerError('Server');
+
 };
 
 module.exports = errorHandler;

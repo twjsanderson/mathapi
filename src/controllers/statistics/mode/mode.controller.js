@@ -16,11 +16,10 @@ class Mode {
      simpleMode = (req, res, next) => {
         const x = req.query.x;
         const { success } = new ApiSuccess(res);
-        const { modeErrorHandler } = new ErrorController(res, 'simpleMode');
+        const { modeErrorHandler, notArray } = new ErrorController(res, 'simpleMode');
         
         const numArray = (typeof x === undefined || typeof x === null) ? notArray(x) : stringToNumArray(x);
         modeErrorHandler(numArray);
-        console.log(Array.isArray(numArray))
         const answer = mode(numArray);
         success(200, 'simpleMode', answer);
     };

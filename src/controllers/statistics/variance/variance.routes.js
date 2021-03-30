@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const asyncCatch = require('../../../util/aysncCatch');
 
 // Controllers
-const Variance = require("./variance.controller");
+const Variance = require('./variance.controller');
 
-const { varianceCalc } = new Variance;
+const { simpleVariance } = new Variance;
 
-// POST VARIANCE
-router.post('/variance', (req, res) => {
-    return varianceCalc(req, res);
-});
+// GET VARIANCE
+router.get('/variance', (req, res, next) => asyncCatch(simpleVariance(req, res, next)));
 
 module.exports = router;

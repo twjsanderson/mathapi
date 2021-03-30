@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const asyncCatch = require('../../../util/aysncCatch');
 
 // Controllers
 const StandardDeviation = require("./stdd.controller");
 
-const { stddCalc } = new StandardDeviation;
+const { stdd } = new StandardDeviation;
 
-// POST STANDARD DEVIATION
-router.post('/standardDeviation', (req, res) => {
-    return stddCalc(req, res);
-});
+// GET STANDARD DEVIATION
+router.get('/standardDeviation', (req, res, next) => asyncCatch(stdd(req, res, next)));
 
 module.exports = router;

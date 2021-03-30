@@ -24,6 +24,8 @@ class ErrorController {
         this.meanSize = 10000;
         this.medianSize = 100000;
         this.modeSize = 100000;
+        this.rangeSize = 100000;
+        this.varianceSize = 100000;
     }
 
     notNumbers = (x, y) => {
@@ -73,8 +75,34 @@ class ErrorController {
         if (arr.length > this.modeSize || arr.length < 1) badRequest(this.resource);
     };
 
+    incorrectRangeSize = (arr) => {
+        if (arr.length > this.rangeSize || arr.length < 1) badRequest(this.resource);
+    };
+
+    incorrectVarianceSize = (arr) => {
+        if (arr.length > this.varianceSize || arr.length < 1) badRequest(this.resource);
+    };
 
     // Error Handlers
+
+    stddErrorHandler = (arr) => {
+        this.notArray(arr);
+        this.incorrectVarianceSize(arr);
+        arr.forEach(num => this.squareRootErrorHandler(num));
+        this.arrayDoesNotIncludeNumbers(arr);
+    };
+
+    varianceErrorHandler = (arr) => {
+        this.notArray(arr);
+        this.incorrectVarianceSize(arr);
+        this.arrayDoesNotIncludeNumbers(arr);
+    };
+
+    rangeErrorHandler = (arr) => {
+        this.notArray(arr);
+        this.incorrectRangeSize(arr);
+        this.arrayDoesNotIncludeNumbers(arr);
+    };
 
     modeErrorHandler = (arr) => {
         this.notArray(arr);

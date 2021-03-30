@@ -1,29 +1,28 @@
-const MathOperations = require("../../../util/math");
-const Helpers = require("../../../util/helpers");
+const MathOperations = require('../../../util/math');
+const Helpers = require('../../../util/helpers');
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../../error/error.controller');
 
-const math = new MathOperations; 
-const helpers = new Helpers;
+const { range } = MathOperations; 
+const { stringToNumArray } = Helpers;
 
 class Range {
 
-    // Range
-    simpleRange = (req, res) => {
+    /**
+     * Simple Range
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    simpleRange = (req, res, next) => {
         const x = req.query.x;
-
-        // input check, array check, item size check
-        if (!x) {
-            res.send({
-                operation: 'range',
-                error: 'One or more query size is out of range' 
-            });
-        } else {
-            const numArray = helpers.stringToNumArray(x);
-            const answer = math.range(numArray);
-            res.send({ 
-                operation: 'range',
-                answer: answer 
-            });
-        }
+        const { success } = new ApiSuccess(res);
+        const { rangeErrorHandler, notArray } = new ErrorController(res, 'simpleRange');
+        
+        const numArray = (typeof x === undefined || typeof x === null) ? notArray(x) : stringToNumArray(x);
+        rangeErrorHandler(numArray);
+        const answer = range(numArray);
+        success(200, 'simpleRange', answer);
     };
 };
 

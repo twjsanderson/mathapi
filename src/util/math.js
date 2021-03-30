@@ -46,16 +46,13 @@ class MathOperations {
                 hashMap[digit]++;
             };
         };
-        // console.log(hashMap)
+
         const maxNumOfOccurences = Math.max(...Object.values(hashMap));
         
-        for (let key in hashMap) {
-            const num = Number(hasMap[key]);
-            if (num === maxNumOfOccurences) {
-                modes.push(Number(key));
-            };
+        for (let key in hashMap) {   
+            const num = Number(hashMap[key]);
+            if (num === maxNumOfOccurences) modes.push(Number(key));
         };
-        console.log(modes)
         return modes;    
     };
 

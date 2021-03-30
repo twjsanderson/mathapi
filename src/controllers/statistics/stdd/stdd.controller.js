@@ -1,28 +1,28 @@
-const MathOperations = require("../../../util/math");
-const Helpers = require("../../../util/helpers");
+const MathOperations = require('../../../util/math');
+const Helpers = require('../../../util/helpers');
+const ApiSuccess = require('../../../util/httpResponses/success/ApiSuccess');
+const ErrorController = require('../../error/error.controller');
 
-const math = new MathOperations; 
-const helpers = new Helpers;
+const { standardDeviation } = MathOperations; 
+const { stringToNumArray } = Helpers;
 
 class StandardDeviation {
-    // Standard Deviation
-    stddCalc = (req, res) => {
-        const x = req.query.x;
 
-        // input check, array check, item size check
-        if (!x) {
-            res.send({
-                operation: 'Standard Deviation',
-                error: 'One or more query size is out of range' 
-            });
-        } else {
-            const numArray = helpers.stringToNumArray(x);
-            const answer = math.standardDeviation(numArray);
-            res.send({ 
-                operation: 'Standard Deviation',
-                answer: answer 
-            });
-        }
+    /**
+     * Standard Deviation
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    stdd = (req, res, next) => {
+        const x = req.query.x;
+        const { success } = new ApiSuccess(res);
+        const { stddErrorHandler, notArray } = new ErrorController(res, 'standardDeviation');
+        
+        const numArray = (typeof x === undefined || typeof x === null) ? notArray(x) : stringToNumArray(x);
+        stddErrorHandler(numArray);
+        const answer = standardDeviation(numArray);
+        success(200, 'standardDeviation', answer);
     };
 };
 

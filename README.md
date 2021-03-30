@@ -1,6 +1,6 @@
 TODO: 
 - tests
 - logger
-- data validation
+- DRY up Error Controller, split into separate controllers?
 - basic rate limiter 
 - how to deal with wrong HTTP methods and 404 NOT FOUND
